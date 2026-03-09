@@ -274,13 +274,21 @@ const COLOR_MAP = {
 // STATE
 // ============================================================
 const STAGE_FLOW = ["AOI", "AVI", "ETEST", "VISUAL 1", "VISUAL 2"];
-const SHEET_SIZE = 100;
+const DEFAULT_LAYOUT_CONFIG = {
+  pcsCols: 2,
+  pcsRows: 5,
+  sheetCols: 2,
+  sheetRows: 2,
+  poCount: 2,
+  drawSource: "",
+};
 let currentStage = "AOI";
 let currentTooltip = null;
 let pickMode = false;
 let currentScope = "PCS";
 let pendingAction = null;
 let pendingAutoPlan = null;
+let layoutConfig = { ...DEFAULT_LAYOUT_CONFIG };
 const selectedCells = new Set();
 const manualXoutState = {};
 const autoXoutState = {};
@@ -301,6 +309,74 @@ function initDefaults() {
   const firstBoard = firstLayer ? Object.keys(MOCK_DB[currentStage][firstLayer] || {})[0] : null;
   if (firstLayer) layerSelect.value = firstLayer;
   if (firstBoard) boardSelect.value = firstBoard;
+  setLayoutInputs(layoutConfig);
+}
+
+function getLayoutFromInputs() {
+  return sanitizeLayoutConfig({
+    pcsCols: Number(document.getElementById("pcsColsInput").value),
+    pcsRows: Number(document.getElementById("pcsRowsInput").value),
+    sheetCols: Number(document.getElementById("sheetColsInput").value),
+    sheetRows: Number(document.getElementById("sheetRowsInput").value),
+    poCount: Number(document.getElementById("poCountInput").value),
+    drawSource: document.getElementById("drawSourceInput").value.trim(),
+  });
+}
+
+function sanitizeLayoutConfig(rawConfig) {
+  return {
+    pcsCols: Math.max(1, Number(rawConfig.pcsCols) || DEFAULT_LAYOUT_CONFIG.pcsCols),
+    pcsRows: Math.max(1, Number(rawConfig.pcsRows) || DEFAULT_LAYOUT_CONFIG.pcsRows),
+    sheetCols: Math.max(1, Number(rawConfig.sheetCols) || DEFAULT_LAYOUT_CONFIG.sheetCols),
+    sheetRows: Math.max(1, Number(rawConfig.sheetRows) || DEFAULT_LAYOUT_CONFIG.sheetRows),
+    poCount: Math.max(1, Number(rawConfig.poCount) || DEFAULT_LAYOUT_CONFIG.poCount),
+    drawSource: rawConfig.drawSource || "",
+  };
+}
+
+function setLayoutInputs(config) {
+  document.getElementById("pcsColsInput").value = String(config.pcsCols);
+  document.getElementById("pcsRowsInput").value = String(config.pcsRows);
+  document.getElementById("sheetColsInput").value = String(config.sheetCols);
+  document.getElementById("sheetRowsInput").value = String(config.sheetRows);
+  document.getElementById("poCountInput").value = String(config.poCount);
+  document.getElementById("drawSourceInput").value = config.drawSource;
+}
+
+function getCellsPerSheet() {
+  return layoutConfig.pcsCols * layoutConfig.pcsRows;
+}
+
+function getDisplayPcsCols() {
+  return layoutConfig.pcsRows;
+}
+
+function getDisplayPcsRows() {
+  return layoutConfig.pcsCols;
+}
+
+function getConfiguredTotalPcs() {
+  return getCellsPerSheet() * layoutConfig.sheetCols * layoutConfig.sheetRows;
+}
+
+function getActiveTotalPcs(data) {
+  return Math.min(data.totalPcs, getConfiguredTotalPcs());
+}
+
+function getLayoutPositionFromIndex(index) {
+  const totalRows = getDisplayPcsRows() * layoutConfig.sheetRows;
+  const row = index % totalRows;
+  const col = Math.floor(index / totalRows);
+
+  return {
+    row,
+    col,
+  };
+}
+
+function getIndexFromLayoutPosition(row, col) {
+  const totalRows = getDisplayPcsRows() * layoutConfig.sheetRows;
+  return (col * totalRows) + row;
 }
 
 function bindEvents() {
@@ -351,6 +427,11 @@ function bindEvents() {
 
   document.getElementById("previousOverlayToggle").addEventListener("change", () => renderAll());
   document.getElementById("searchBtn").addEventListener("click", runSearch);
+  document.getElementById("saveLayoutBtn").addEventListener("click", applyLayoutConfig);
+  ["pcsColsInput", "pcsRowsInput", "sheetColsInput", "sheetRowsInput", "poCountInput"].forEach((id) => {
+    document.getElementById(id).addEventListener("input", applyLayoutConfig);
+  });
+  document.getElementById("drawSourceInput").addEventListener("change", applyLayoutConfig);
 
   document.getElementById("exportPdfBtn").addEventListener("click", () => {
     const data = getCurrentData();
@@ -408,6 +489,14 @@ function ensureLayerBoardIsValid() {
   }
 }
 
+function applyLayoutConfig() {
+  layoutConfig = getLayoutFromInputs();
+  setLayoutInputs(layoutConfig);
+  clearSelection();
+  renderAll();
+  updateAutoPanel();
+}
+
 function updateStageButtonState() {
   document.querySelectorAll("#stageSelector button").forEach((btn) => {
     if (btn.dataset.stage === currentStage) {
@@ -456,14 +545,25 @@ function getPreviousStage() {
 }
 
 function getSheetIndex(pcsIndex) {
-  return Math.floor(pcsIndex / SHEET_SIZE);
+  const pos = getLayoutPositionFromIndex(pcsIndex);
+  const sheetRow = Math.floor(pos.row / getDisplayPcsRows());
+  const sheetCol = Math.floor(pos.col / getDisplayPcsCols());
+  return (sheetRow * layoutConfig.sheetCols) + sheetCol;
 }
 
 function getSheetIndices(sheetIndex, totalPcs) {
-  const start = sheetIndex * SHEET_SIZE;
-  const end = Math.min(start + SHEET_SIZE, totalPcs);
   const result = [];
-  for (let i = start; i < end; i++) result.push(i);
+  const sheetRow = Math.floor(sheetIndex / layoutConfig.sheetCols);
+  const sheetCol = sheetIndex % layoutConfig.sheetCols;
+
+  for (let localCol = 0; localCol < getDisplayPcsCols(); localCol++) {
+    for (let localRow = 0; localRow < getDisplayPcsRows(); localRow++) {
+      const row = (sheetRow * getDisplayPcsRows()) + localRow;
+      const col = (sheetCol * getDisplayPcsCols()) + localCol;
+      const idx = getIndexFromLayoutPosition(row, col);
+      if (idx < totalPcs) result.push(idx);
+    }
+  }
   return result;
 }
 
@@ -495,19 +595,20 @@ function getSelectedSheets() {
 function getTargetIndicesByLevel(level) {
   const data = getCurrentData();
   if (!data) return [];
+  const activeTotalPcs = getActiveTotalPcs(data);
 
   if (level === "PCS") return Array.from(selectedCells);
 
   if (level === "SHEET") {
     const sheets = getSelectedSheets();
     const result = [];
-    for (const sheet of sheets) result.push(...getSheetIndices(sheet, data.totalPcs));
+    for (const sheet of sheets) result.push(...getSheetIndices(sheet, activeTotalPcs));
     return result;
   }
 
   if (level === "BOARD") {
     const result = [];
-    for (let i = 0; i < data.totalPcs; i++) result.push(i);
+    for (let i = 0; i < activeTotalPcs; i++) result.push(i);
     return result;
   }
 
@@ -534,61 +635,88 @@ function renderSelectionSummary(data) {
   const summaryEl = document.getElementById("selectionSummary");
   const selectedCount = selectedCells.size;
   const sheets = new Set(Array.from(selectedCells).map(getSheetIndex));
-  summaryEl.textContent = `Scope=${currentScope} | PCS=${selectedCount} | Sheet=${sheets.size} | Board=${getCurrentContext().board} | Total=${data.totalPcs}`;
+  const activeTotalPcs = getActiveTotalPcs(data);
+  summaryEl.textContent = `Scope=${currentScope} | PCS=${selectedCount} | Sheet=${sheets.size} | Board=${getCurrentContext().board} | Total=${activeTotalPcs} | PO=${layoutConfig.poCount}`;
 }
 
 function renderGrid(data) {
   const grid = document.getElementById("gridMapping");
   grid.innerHTML = "";
 
+  const activeTotalPcs = getActiveTotalPcs(data);
+  const cellsPerSheet = getCellsPerSheet();
+  const totalSheets = Math.ceil(activeTotalPcs / cellsPerSheet);
   const key = getCurrentKey();
   const defectMap = getDefectMap(data);
   const prevDefects = getPreviousDefectMap();
   const showPrevOverlay = document.getElementById("previousOverlayToggle").checked;
+  grid.style.setProperty("--sheet-cols", String(layoutConfig.sheetCols));
 
   const manualSet = getStateSet(manualXoutState, key);
   const autoSet = getStateSet(autoXoutState, key);
   const overSet = getStateSet(overXoutState, key);
   const selectedSheets = getSelectedSheets();
 
-  for (let i = 0; i < data.totalPcs; i++) {
-    const defect = defectMap[i];
-    const prevDefect = prevDefects[i];
-    const cell = document.createElement("div");
+  for (let sheetRow = 0; sheetRow < layoutConfig.sheetRows; sheetRow++) {
+    for (let sheetCol = 0; sheetCol < layoutConfig.sheetCols; sheetCol++) {
+      const sheetIndex = (sheetRow * layoutConfig.sheetCols) + sheetCol;
+      if (sheetIndex >= totalSheets) continue;
 
-    let statusClass = "bg-emerald-500/20 dark:bg-emerald-500/10 border border-emerald-500/30";
-    let label = "";
+      const sheetWrap = document.createElement("div");
+      sheetWrap.className = "mapping-sheet";
 
-    if (defect) {
-      const c = COLOR_MAP[defect.color] || COLOR_MAP.yellow;
-      statusClass = c.cell;
-      label = defect.code;
+      const sheetGrid = document.createElement("div");
+      sheetGrid.className = "mapping-sheet-grid";
+      sheetGrid.style.gridTemplateColumns = `repeat(${getDisplayPcsCols()}, minmax(0, 1fr))`;
+
+      for (let pcsRow = 0; pcsRow < getDisplayPcsRows(); pcsRow++) {
+        for (let pcsCol = 0; pcsCol < getDisplayPcsCols(); pcsCol++) {
+          const row = (sheetRow * getDisplayPcsRows()) + pcsRow;
+          const col = (sheetCol * getDisplayPcsCols()) + pcsCol;
+          const i = getIndexFromLayoutPosition(row, col);
+          if (i >= activeTotalPcs) continue;
+
+          const defect = defectMap[i];
+          const prevDefect = prevDefects[i];
+          const cell = document.createElement("div");
+
+          let statusClass = "bg-emerald-500/20 dark:bg-emerald-500/10 border border-emerald-500/30";
+          let textClass = "text-slate-700";
+
+          if (defect) {
+            const c = COLOR_MAP[defect.color] || COLOR_MAP.yellow;
+            statusClass = c.cell;
+            textClass = "text-white";
+          }
+
+          cell.className = `defect-cell flex items-center justify-center cursor-pointer ${statusClass}`;
+          cell.dataset.index = String(i);
+
+          if (pickMode) cell.classList.add("selectable");
+          if (selectedCells.has(i)) cell.classList.add("selected-cell");
+          if (currentScope === "SHEET" && selectedSheets.has(getSheetIndex(i))) cell.classList.add("sheet-highlight");
+          if (currentScope === "BOARD" && selectedCells.size > 0) cell.classList.add("board-highlight");
+          if (manualSet.has(i)) cell.classList.add("xout-manual", "cell-disabled");
+          if (autoSet.has(i)) cell.classList.add("xout-auto", "cell-disabled");
+          if (overSet.has(i)) cell.classList.add("xout-over");
+
+          if (showPrevOverlay && !defect && prevDefect) {
+            cell.classList.add("prev-overlay");
+          }
+
+          cell.innerHTML = `<span class="${textClass}">${String(i + 1).padStart(2, "0")}</span>`;
+          cell.addEventListener("click", (e) => {
+            e.stopPropagation();
+            handleCellInteraction(i, defect, prevDefect, activeTotalPcs);
+          });
+
+          sheetGrid.appendChild(cell);
+        }
+      }
+
+      sheetWrap.appendChild(sheetGrid);
+      grid.appendChild(sheetWrap);
     }
-
-    cell.className = `defect-cell rounded-sm flex items-center justify-center cursor-pointer ${statusClass}`;
-    cell.dataset.index = String(i);
-
-    if (pickMode) cell.classList.add("selectable");
-    if (selectedCells.has(i)) cell.classList.add("selected-cell");
-    if (currentScope === "SHEET" && selectedSheets.has(getSheetIndex(i))) cell.classList.add("sheet-highlight");
-    if (currentScope === "BOARD" && selectedCells.size > 0) cell.classList.add("board-highlight");
-    if (manualSet.has(i)) cell.classList.add("xout-manual", "cell-disabled");
-    if (autoSet.has(i)) cell.classList.add("xout-auto", "cell-disabled");
-    if (overSet.has(i)) cell.classList.add("xout-over");
-
-    if (showPrevOverlay && !defect && prevDefect) {
-      cell.classList.add("prev-overlay");
-      if (!label) label = "P";
-    }
-
-    if (label) cell.innerHTML = `<span class="text-[8px] font-bold text-white">${label}</span>`;
-
-    cell.addEventListener("click", (e) => {
-      e.stopPropagation();
-      handleCellInteraction(i, defect, prevDefect, data.totalPcs);
-    });
-
-    grid.appendChild(cell);
   }
 }
 
@@ -622,8 +750,9 @@ function handleCellInteraction(index, defect, prevDefect, totalPcs) {
   }
 
   removeTooltip();
-  const row = Math.floor(index / 20) + 1;
-  const col = (index % 20) + 1;
+  const pos = getLayoutPositionFromIndex(index);
+  const row = pos.row + 1;
+  const col = pos.col + 1;
   let info = `<b>Vi tri:</b> Hang ${row}, Cot ${col}<br><b>Index:</b> ${index}`;
   if (defect) info += `<br><b>Defect:</b> ${defect.code} - ${defect.name}`;
   else info += `<br><b>Defect:</b> OK`;
@@ -703,9 +832,11 @@ function buildAutoPlan() {
     const data = stageLayerData[board];
     const defectMap = getDefectMap(data);
     const boardPlan = { sheets: [], overSheets: [] };
+    const activeTotalPcs = getActiveTotalPcs(data);
+    const cellsPerSheet = getCellsPerSheet();
 
-    for (let sheet = 0; sheet < Math.ceil(data.totalPcs / SHEET_SIZE); sheet++) {
-      const cells = getSheetIndices(sheet, data.totalPcs);
+    for (let sheet = 0; sheet < Math.ceil(activeTotalPcs / cellsPerSheet); sheet++) {
+      const cells = getSheetIndices(sheet, activeTotalPcs);
       const count = cells.reduce((sum, idx) => sum + (defectMap[idx] ? 1 : 0), 0);
       if (count >= threshold) {
         boardPlan.sheets.push({ sheet, count });
@@ -781,14 +912,14 @@ function applyAutoXout() {
     const overSet = getStateSet(overXoutState, key);
 
     plan.sheets.forEach((sheetInfo) => {
-      getSheetIndices(sheetInfo.sheet, data.totalPcs).forEach((idx) => {
+      getSheetIndices(sheetInfo.sheet, getActiveTotalPcs(data)).forEach((idx) => {
         autoSet.add(idx);
         totalApplied += 1;
       });
     });
 
     plan.overSheets.forEach((sheetIdx) => {
-      getSheetIndices(sheetIdx, data.totalPcs).forEach((idx) => overSet.add(idx));
+      getSheetIndices(sheetIdx, getActiveTotalPcs(data)).forEach((idx) => overSet.add(idx));
     });
   });
 
@@ -928,12 +1059,16 @@ function renderLegend(data) {
   const autoSet = getStateSet(autoXoutState, key);
   const overSet = getStateSet(overXoutState, key);
   const showPrev = document.getElementById("previousOverlayToggle").checked;
+  const activeTotalPcs = getActiveTotalPcs(data);
 
   const counts = { red: 0, orange: 0, yellow: 0 };
-  data.defects.forEach((d) => { counts[d.color] = (counts[d.color] || 0) + d.positions.length; });
+  data.defects.forEach((d) => {
+    const visibleCount = d.positions.filter((p) => p < activeTotalPcs).length;
+    counts[d.color] = (counts[d.color] || 0) + visibleCount;
+  });
 
   const totalDefects = counts.red + counts.orange + counts.yellow;
-  const okCount = data.totalPcs - totalDefects;
+  const okCount = activeTotalPcs - totalDefects;
 
   container.innerHTML = `
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
@@ -956,6 +1091,7 @@ function renderLegend(data) {
 
 function renderDefectCodes(data) {
   const container = document.getElementById("defectCodesContainer");
+  const activeTotalPcs = getActiveTotalPcs(data);
   if (data.defects.length === 0) {
     container.innerHTML = `<p class="text-sm text-slate-400 dark:text-slate-500 text-center py-4">Khong co loi nao duoc phat hien.</p>`;
     return;
@@ -963,8 +1099,15 @@ function renderDefectCodes(data) {
 
   const grouped = {};
   for (const d of data.defects) {
-    if (!grouped[d.code]) grouped[d.code] = { ...d, count: d.positions.length };
-    else grouped[d.code].count += d.positions.length;
+    const visibleCount = d.positions.filter((p) => p < activeTotalPcs).length;
+    if (visibleCount === 0) continue;
+    if (!grouped[d.code]) grouped[d.code] = { ...d, count: visibleCount };
+    else grouped[d.code].count += visibleCount;
+  }
+
+  if (Object.keys(grouped).length === 0) {
+    container.innerHTML = `<p class="text-sm text-slate-400 dark:text-slate-500 text-center py-4">Khong co loi nao duoc phat hien.</p>`;
+    return;
   }
 
   let html = "";
@@ -989,7 +1132,7 @@ function updateFooter(data) {
   const time = now.toTimeString().split(" ")[0];
   document.getElementById("footerTime").textContent = `Last updated: ${time}`;
   document.getElementById("footerMachine").textContent = `Machine: ${data.machine}`;
-  document.getElementById("footerTotal").textContent = `Total Pcs: ${data.totalPcs}`;
+  document.getElementById("footerTotal").textContent = `Total Pcs: ${getActiveTotalPcs(data)}`;
 }
 
 function showCellTooltip(anchor, html) {
@@ -1105,7 +1248,7 @@ function runSearch() {
   clearSelection();
   renderAll();
   updateAutoPanel();
-  showToast("Dong bo thanh cong!");
+  showToast("Đồng bộ thành công!");
 }
 
 function exportCSV(data) {
@@ -1115,10 +1258,12 @@ function exportCSV(data) {
   const manualSet = getStateSet(manualXoutState, key);
   const autoSet = getStateSet(autoXoutState, key);
   const overSet = getStateSet(overXoutState, key);
+  const activeTotalPcs = getActiveTotalPcs(data);
 
-  for (let i = 0; i < data.totalPcs; i++) {
-    const row = Math.floor(i / 20) + 1;
-    const col = (i % 20) + 1;
+  for (let i = 0; i < activeTotalPcs; i++) {
+    const pos = getLayoutPositionFromIndex(i);
+    const row = pos.row + 1;
+    const col = pos.col + 1;
     const defect = defectMap[i];
 
     let xState = "";

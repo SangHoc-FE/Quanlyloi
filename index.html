@@ -19,7 +19,7 @@
         extend: {
           colors: {
             primary: "#10b981",
-            "background-light": "#f8fafc",
+            "background-light": "#f8fafc", 
             "background-dark": "#0f172a",
           },
           fontFamily: {
@@ -121,7 +121,7 @@
             </div>
             <label class="inline-flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
               <input id="previousOverlayToggle" type="checkbox" class="rounded border-slate-300 text-primary focus:ring-primary" />
-              Hien loi cong doan truoc
+              Hiện lỗi công đoạn trước
             </label>
           </div>
         </div>
@@ -165,7 +165,7 @@
               <button id="xoutPcsBtn" class="toolbar-btn" type="button">X-OUT PCS</button>
               <button id="xoutSheetBtn" class="toolbar-btn" type="button">X-OUT Sheet</button>
               <button id="xoutBoardBtn" class="toolbar-btn" type="button">X-OUT Board</button>
-              <button id="clearSelectionBtn" class="toolbar-btn" type="button">Bo chon</button>
+              <button id="clearSelectionBtn" class="toolbar-btn" type="button">Bỏ chọn</button>
             </div>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
@@ -179,7 +179,34 @@
               </select>
             </div>
             <div class="md:col-span-2 p-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
-              <p id="selectionSummary" class="text-sm text-slate-600 dark:text-slate-300">Chua co selection.</p>
+              <div class="grid grid-cols-1 xl:grid-cols-7 gap-2">
+                <label class="text-xs text-slate-500 dark:text-slate-400">
+                  Số cột PCS
+                  <input id="pcsColsInput" type="number" min="1" value="2" class="w-full mt-1 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 py-1 text-sm" />
+                </label>
+                <label class="text-xs text-slate-500 dark:text-slate-400">
+                  Số hàng PCS
+                  <input id="pcsRowsInput" type="number" min="1" value="5" class="w-full mt-1 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 py-1 text-sm" />
+                </label>
+                <label class="text-xs text-slate-500 dark:text-slate-400">
+                  Số cột Tờ
+                  <input id="sheetColsInput" type="number" min="1" value="2" class="w-full mt-1 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 py-1 text-sm" />
+                </label>
+                <label class="text-xs text-slate-500 dark:text-slate-400">
+                  Số hàng Bảng
+                  <input id="sheetRowsInput" type="number" min="1" value="2" class="w-full mt-1 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 py-1 text-sm" />
+                </label>
+                <label class="text-xs text-slate-500 dark:text-slate-400">
+                  Số PO
+                  <input id="poCountInput" type="number" min="1" value="2" class="w-full mt-1 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 py-1 text-sm" />
+                </label>
+                <label class="text-xs text-slate-500 dark:text-slate-400">
+                  Mã nguồn vẽ
+                  <input id="drawSourceInput" type="text" placeholder="Mã nguồn vẽ" class="w-full mt-1 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 py-1 text-sm" />
+                </label>
+                <button id="saveLayoutBtn" type="button" class="toolbar-btn h-full min-h-[56px]">Lưu</button>
+              </div>
+              <p id="selectionSummary" class="text-xs text-slate-600 dark:text-slate-300 mt-2">Chưa có selection.</p>
             </div>
           </div>
         </div>
@@ -229,9 +256,9 @@
 
         <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-red-200 dark:border-red-900/40 shadow-sm space-y-3">
           <h3 class="text-sm font-bold text-red-600 dark:text-red-400 uppercase tracking-wider">Danger Zone</h3>
-          <p class="text-xs text-slate-600 dark:text-slate-300">Xoa du lieu theo pham vi da chon. Thao tac nay anh huong truc tiep den du lieu hien tai.</p>
-          <button id="deleteByScopeBtn" type="button" class="w-full px-3 py-2 rounded-lg border border-red-300 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 text-sm font-semibold">Xoa theo scope</button>
-          <button id="deleteLotBtn" type="button" class="w-full px-3 py-2 rounded-lg border border-red-300 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 text-sm font-semibold">Xoa LOT (xac nhan manh)</button>
+          <p class="text-xs text-slate-600 dark:text-slate-300">Xóa dữ liệu theo phạm vi đã chọn. Thao tác này ảnh hưởng trực tiếp đến dữ liệu hiện tại.</p>
+          <button id="deleteByScopeBtn" type="button" class="w-full px-3 py-2 rounded-lg border border-red-300 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 text-sm font-semibold">Xóa theo scope</button>
+          <button id="deleteLotBtn" type="button" class="w-full px-3 py-2 rounded-lg border border-red-300 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 text-sm font-semibold">Xóa LOT (xác nhận mạnh)</button>
         </div>
 
         <div
@@ -289,37 +316,37 @@
   <div id="confirmModal" class="modal-backdrop hidden">
     <div class="modal-panel">
       <div class="flex items-center justify-between mb-4">
-        <h3 class="text-lg font-bold">Xac nhan thao tac</h3>
+        <h3 class="text-lg font-bold">Xác nhận thao tác</h3>
         <button id="closeConfirmModalBtn" class="text-slate-400 hover:text-slate-600" type="button">
           <span class="material-icons">close</span>
         </button>
       </div>
       <div class="space-y-3 text-sm">
         <div>
-          <label class="block text-xs font-semibold text-slate-500 mb-1">Loai thao tac</label>
+          <label class="block text-xs font-semibold text-slate-500 mb-1">Loại thao tác</label>
           <input id="confirmActionType" class="modal-input" type="text" readonly />
         </div>
         <div>
-          <label class="block text-xs font-semibold text-slate-500 mb-1">Cap tac dong</label>
+          <label class="block text-xs font-semibold text-slate-500 mb-1">Cấp tác động</label>
           <input id="confirmImpactLevel" class="modal-input" type="text" readonly />
         </div>
         <div>
-          <label class="block text-xs font-semibold text-slate-500 mb-1">Ma loi / Ly do</label>
-          <input id="confirmReason" class="modal-input" type="text" placeholder="Nhap ma loi hoac ly do" />
+          <label class="block text-xs font-semibold text-slate-500 mb-1">Mã lỗi / Lý do</label>
+          <input id="confirmReason" class="modal-input" type="text" placeholder="Nhập mã lỗi hoặc lý do" />
         </div>
         <div>
-          <label class="block text-xs font-semibold text-slate-500 mb-1">Ghi chu (tuy chon)</label>
-          <textarea id="confirmNote" class="modal-input" rows="2" placeholder="Them ghi chu"></textarea>
+          <label class="block text-xs font-semibold text-slate-500 mb-1">Ghi chú (tùy chọn)</label>
+          <textarea id="confirmNote" class="modal-input" rows="2" placeholder="Thêm ghi chú"></textarea>
         </div>
         <div>
-          <label class="block text-xs font-semibold text-slate-500 mb-1">So luong bi anh huong</label>
+          <label class="block text-xs font-semibold text-slate-500 mb-1">Số lượng bị ảnh hưởng</label>
           <input id="confirmAffectedCount" class="modal-input" type="text" readonly />
         </div>
-        <p id="confirmWarning" class="text-xs text-red-600 hidden">Canh bao: so luong X-OUT lon, vui long kiem tra lai truoc khi ap dung.</p>
+        <p id="confirmWarning" class="text-xs text-red-600 hidden">ảnh báo: số lượng X-OUT lớn, vui lòng kiểm tra lại trước khi áp dụng.</p>
       </div>
       <div class="mt-5 flex justify-end gap-2">
-        <button id="cancelConfirmBtn" type="button" class="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700">Huy</button>
-        <button id="applyConfirmBtn" type="button" class="px-4 py-2 rounded-lg bg-primary text-white font-semibold">Xac nhan ap dung</button>
+        <button id="cancelConfirmBtn" type="button" class="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700">Hủy</button>
+        <button id="applyConfirmBtn" type="button" class="px-4 py-2 rounded-lg bg-primary text-white font-semibold">Xác nhận áp dụng</button>
       </div>
     </div>
   </div>
@@ -334,8 +361,8 @@
       </div>
       <div id="autoPreviewContent" class="text-sm text-slate-600 dark:text-slate-300 max-h-60 overflow-auto"></div>
       <div class="mt-5 flex justify-end gap-2">
-        <button id="cancelAutoPreviewBtn" type="button" class="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700">Dong</button>
-        <button id="confirmAutoPreviewBtn" type="button" class="px-4 py-2 rounded-lg bg-primary text-white font-semibold">Xac nhan Auto X-OUT</button>
+        <button id="cancelAutoPreviewBtn" type="button" class="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700">Đóng</button>
+        <button id="confirmAutoPreviewBtn" type="button" class="px-4 py-2 rounded-lg bg-primary text-white font-semibold">Xác nhận Auto X-OUT</button>
       </div>
     </div>
   </div>
