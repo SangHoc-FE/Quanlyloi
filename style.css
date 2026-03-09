@@ -1,0 +1,259 @@
+﻿body {
+  font-family: 'Inter', sans-serif;
+}
+
+.grid-mapping {
+  display: grid;
+  grid-template-columns: repeat(20, 1fr);
+  gap: 2px;
+}
+
+.defect-cell {
+  aspect-ratio: 1 / 1;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.defect-cell:hover {
+  transform: scale(1.06);
+  z-index: 10;
+}
+
+.defect-cell.selectable:hover {
+  outline: 2px solid #0f172a;
+  outline-offset: -2px;
+}
+
+.defect-cell.selected-cell {
+  box-shadow: 0 0 0 2px #0f172a inset, 0 0 0 2px #ffffff;
+}
+
+.defect-cell.sheet-highlight {
+  box-shadow: 0 0 0 2px #0284c7 inset;
+}
+
+.defect-cell.board-highlight {
+  box-shadow: 0 0 0 2px #0369a1 inset;
+}
+
+.defect-cell.xout-manual {
+  background-image: repeating-linear-gradient(45deg, rgba(148, 163, 184, 0.8) 0px, rgba(148, 163, 184, 0.8) 4px, transparent 4px, transparent 8px);
+}
+
+.defect-cell.xout-auto {
+  box-shadow: 0 0 0 2px #0ea5e9 inset;
+}
+
+.defect-cell.xout-over {
+  box-shadow: 0 0 0 2px #ef4444 inset;
+}
+
+.defect-cell.prev-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border: 1px dashed #0ea5e9;
+  pointer-events: none;
+}
+
+.defect-cell.cell-disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.toolbar-btn {
+  padding: 0.45rem 0.8rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #0f172a;
+  transition: all 0.2s;
+}
+
+.dark .toolbar-btn {
+  background: #0f172a;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+.toolbar-btn:hover {
+  background: #f8fafc;
+}
+
+.dark .toolbar-btn:hover {
+  background: #1e293b;
+}
+
+.toolbar-btn.active {
+  border-color: #10b981;
+  box-shadow: 0 0 0 1px #10b981 inset;
+}
+
+.toolbar-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 80;
+  padding: 1rem;
+}
+
+.modal-panel {
+  width: min(560px, 100%);
+  background: #ffffff;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+  padding: 1.25rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.dark .modal-panel {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.modal-input {
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  padding: 0.45rem 0.65rem;
+  font-size: 0.875rem;
+}
+
+.dark .modal-input {
+  border-color: #334155;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+.history-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+}
+
+.history-drawer.open {
+  pointer-events: auto;
+  background: rgba(15, 23, 42, 0.35);
+}
+
+.history-content {
+  margin-left: auto;
+  width: min(760px, 100%);
+  height: 100%;
+  transform: translateX(100%);
+  transition: transform 0.25s ease;
+}
+
+.history-drawer.open .history-content {
+  transform: translateX(0);
+}
+
+.legend-group {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  background: #ffffff;
+}
+
+.dark .legend-group {
+  border-color: #334155;
+  background: #0f172a;
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #475569;
+}
+
+.dark .legend-row {
+  color: #94a3b8;
+}
+
+.legend-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 1px solid rgba(15, 23, 42, 0.2);
+  flex-shrink: 0;
+}
+
+.cell-tooltip {
+  position: absolute;
+  z-index: 9999;
+  background: white;
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 10px 14px;
+  font-size: 12px;
+  line-height: 1.6;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+  max-width: 220px;
+  animation: tooltipIn 0.15s ease-out;
+}
+
+.dark .cell-tooltip {
+  background: #1e293b;
+  color: #e2e8f0;
+  border-color: #334155;
+}
+
+@keyframes tooltipIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.toast-notify {
+  position: fixed;
+  bottom: 70px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #1e293b;
+  color: #f1f5f9;
+  padding: 12px 24px;
+  border-radius: 0.75rem;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 9999;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.toast-notify.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.dark .toast-notify {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+.hidden {
+  display: none !important;
+}

@@ -1,0 +1,369 @@
+﻿<!DOCTYPE html>
+<html lang="vi" translate="no">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="google" content="notranslate">
+  <title>Defect Management</title>
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#10b981",
+            "background-light": "#f8fafc",
+            "background-dark": "#0f172a",
+          },
+          fontFamily: {
+            display: ["Inter", "sans-serif"],
+          },
+          borderRadius: {
+            DEFAULT: "0.5rem",
+          },
+        },
+      },
+    };
+  </script>
+
+  <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+
+  <header
+    class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+    <div class="flex items-center gap-3">
+      <h1 class="text-xl font-bold tracking-tight">
+        Defect Management
+      </h1>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <button id="openHistoryBtn"
+        class="px-3 py-2 text-sm font-medium rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2"
+        type="button">
+        <span class="material-icons text-base">history</span>
+        Lich su
+      </button>
+      <div class="h-8 w-px bg-slate-200 dark:bg-slate-700"></div>
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center">
+          <span class="material-icons text-sm">person</span>
+        </div>
+        <span id="activeUserLabel" class="text-sm font-medium">Admin User</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-[1600px] mx-auto p-6 space-y-6 pb-24">
+
+    <section class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
+
+        <div class="lg:col-span-3">
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Product ID</label>
+          <div class="relative">
+            <span
+              class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">inventory_2</span>
+            <input id="productIdInput"
+              class="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-lg focus:ring-primary focus:border-primary"
+              placeholder="Enter Product ID..." type="text" />
+          </div>
+        </div>
+
+        <div class="lg:col-span-3">
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Lot ID</label>
+          <div class="relative">
+            <span
+              class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">qr_code_2</span>
+            <input id="lotIdInput"
+              class="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-lg focus:ring-primary focus:border-primary"
+              placeholder="Enter Lot ID..." type="text" />
+          </div>
+        </div>
+
+        <div class="lg:col-span-4"></div>
+
+        <div class="lg:col-span-2">
+          <button id="searchBtn"
+            class="w-full bg-primary hover:bg-emerald-600 text-white font-semibold py-2 px-6 rounded-lg flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-500/20"
+            type="button">
+            <span class="material-icons text-xl">search</span>
+            Search
+          </button>
+        </div>
+
+        <div class="lg:col-span-6 space-y-3">
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Stage Selection</label>
+          <div class="flex items-center gap-4 flex-wrap">
+            <div id="stageSelector" class="flex bg-slate-100 dark:bg-slate-900 p-1 rounded-xl w-fit">
+              <button class="px-4 py-1.5 rounded-lg text-sm font-semibold bg-primary text-white shadow-sm" data-stage="AOI">AOI</button>
+              <button
+                class="px-4 py-1.5 rounded-lg text-sm font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+                data-stage="AVI">AVI</button>
+              <button
+                class="px-4 py-1.5 rounded-lg text-sm font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+                data-stage="ETEST">ETEST</button>
+              <button
+                class="px-4 py-1.5 rounded-lg text-sm font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+                data-stage="VISUAL 1">VISUAL 1</button>
+              <button
+                class="px-4 py-1.5 rounded-lg text-sm font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+                data-stage="VISUAL 2">VISUAL 2</button>
+            </div>
+            <label class="inline-flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+              <input id="previousOverlayToggle" type="checkbox" class="rounded border-slate-300 text-primary focus:ring-primary" />
+              Hien loi cong doan truoc
+            </label>
+          </div>
+        </div>
+
+        <div class="lg:col-span-3">
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Layer</label>
+          <select id="layerSelect"
+            class="w-full py-2 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-lg text-sm">
+            <option>Chon Layer</option>
+            <option>Layer 1 (TOP)</option>
+            <option>Layer 2 (BOTTOM)</option>
+            <option>Internal 1</option>
+          </select>
+        </div>
+
+        <div class="lg:col-span-3">
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Board ID</label>
+          <select id="boardSelect"
+            class="w-full py-2 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-lg text-sm">
+            <option>Chon Board</option>
+            <option>BRD-88210-01</option>
+            <option>BRD-88210-02</option>
+            <option>BRD-88210-03</option>
+          </select>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
+
+      <div class="xl:col-span-3 space-y-4">
+        <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <h2 class="text-base font-bold flex items-center gap-2">
+              <span class="material-icons text-primary">construction</span>
+              Manual X-OUT Toolbar
+            </h2>
+            <div class="flex flex-wrap gap-2">
+              <button id="pickPcsBtn" class="toolbar-btn" type="button">Chon PCS</button>
+              <button id="xoutPcsBtn" class="toolbar-btn" type="button">X-OUT PCS</button>
+              <button id="xoutSheetBtn" class="toolbar-btn" type="button">X-OUT Sheet</button>
+              <button id="xoutBoardBtn" class="toolbar-btn" type="button">X-OUT Board</button>
+              <button id="clearSelectionBtn" class="toolbar-btn" type="button">Bo chon</button>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Scope Selector</label>
+              <select id="scopeSelect" class="w-full py-2 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 rounded-lg text-sm">
+                <option value="PCS">PCS</option>
+                <option value="SHEET">Sheet</option>
+                <option value="BOARD">Board</option>
+                <option value="LOT">Lot</option>
+              </select>
+            </div>
+            <div class="md:col-span-2 p-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+              <p id="selectionSummary" class="text-sm text-slate-600 dark:text-slate-300">Chua co selection.</p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="bg-white dark:bg-slate-800 p-8 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-lg font-bold flex items-center gap-2">
+              <span class="material-icons text-primary">analytics</span>
+              2D Mapping Visualization
+            </h2>
+          </div>
+
+          <div
+            class="relative overflow-auto p-4 bg-slate-50 dark:bg-slate-900/50 rounded-lg border border-slate-100 dark:border-slate-800">
+            <div class="grid-mapping min-w-[800px]" id="gridMapping"></div>
+          </div>
+
+          <div id="legendContainer" class="mt-6 space-y-4"></div>
+        </div>
+      </div>
+
+      <aside class="space-y-6">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+          <h3 class="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4">Error Code</h3>
+          <div id="defectCodesContainer" class="space-y-3"></div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+          <h3 class="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Auto X-OUT</h3>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div class="text-slate-500 dark:text-slate-400">Threshold/sheet</div>
+            <div><input id="autoThresholdInput" type="number" min="1" value="6" class="w-full rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 py-1 text-sm" /></div>
+            <div class="text-slate-500 dark:text-slate-400">Source stage</div>
+            <div id="autoSourceStage" class="font-semibold">-</div>
+            <div class="text-slate-500 dark:text-slate-400">Affected sheets</div>
+            <div id="autoAffectedCount" class="font-semibold">0</div>
+          </div>
+          <div id="autoPreviewSummary" class="text-xs text-slate-600 dark:text-slate-300 p-2 rounded bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+            Chua preview Auto X-OUT.
+          </div>
+          <div class="flex gap-2">
+            <button id="previewAutoXoutBtn" type="button" class="toolbar-btn flex-1">Preview</button>
+            <button id="runAutoXoutBtn" type="button" class="toolbar-btn flex-1">Run Auto X-OUT</button>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-red-200 dark:border-red-900/40 shadow-sm space-y-3">
+          <h3 class="text-sm font-bold text-red-600 dark:text-red-400 uppercase tracking-wider">Danger Zone</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-300">Xoa du lieu theo pham vi da chon. Thao tac nay anh huong truc tiep den du lieu hien tai.</p>
+          <button id="deleteByScopeBtn" type="button" class="w-full px-3 py-2 rounded-lg border border-red-300 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 text-sm font-semibold">Xoa theo scope</button>
+          <button id="deleteLotBtn" type="button" class="w-full px-3 py-2 rounded-lg border border-red-300 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 text-sm font-semibold">Xoa LOT (xac nhan manh)</button>
+        </div>
+
+        <div
+          class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2">
+          <button id="exportPdfBtn"
+            class="w-full flex items-center justify-between px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors text-sm font-medium"
+            type="button">
+            <span class="flex items-center gap-2">
+              <span class="material-icons text-blue-500">picture_as_pdf</span>
+              Export Report (PDF)
+            </span>
+            <span class="material-icons text-slate-400">chevron_right</span>
+          </button>
+
+          <button id="exportCsvBtn"
+            class="w-full flex items-center justify-between px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors text-sm font-medium"
+            type="button">
+            <span class="flex items-center gap-2">
+              <span class="material-icons text-emerald-500">table_view</span>
+              Export Data (CSV)
+            </span>
+            <span class="material-icons text-slate-400">chevron_right</span>
+          </button>
+        </div>
+      </aside>
+    </div>
+
+  </main>
+
+  <footer
+    class="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 px-6 py-3 flex justify-between items-center z-40">
+    <div class="flex gap-8 text-xs font-medium text-slate-500 dark:text-slate-400">
+      <div class="flex items-center gap-2">
+        <span class="material-icons text-sm">schedule</span>
+        <span id="footerTime">Last updated: 14:35:02</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="material-icons text-sm">sensors</span>
+        <span id="footerMachine">Machine: AOI-05</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="material-icons text-sm">settings_input_component</span>
+        <span id="footerTotal">Total Pcs: 400</span>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <div class="flex items-center gap-2">
+        <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+        <span class="text-xs font-semibold text-emerald-500 uppercase">Live Monitoring</span>
+      </div>
+    </div>
+  </footer>
+
+  <div id="confirmModal" class="modal-backdrop hidden">
+    <div class="modal-panel">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-bold">Xac nhan thao tac</h3>
+        <button id="closeConfirmModalBtn" class="text-slate-400 hover:text-slate-600" type="button">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      <div class="space-y-3 text-sm">
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 mb-1">Loai thao tac</label>
+          <input id="confirmActionType" class="modal-input" type="text" readonly />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 mb-1">Cap tac dong</label>
+          <input id="confirmImpactLevel" class="modal-input" type="text" readonly />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 mb-1">Ma loi / Ly do</label>
+          <input id="confirmReason" class="modal-input" type="text" placeholder="Nhap ma loi hoac ly do" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 mb-1">Ghi chu (tuy chon)</label>
+          <textarea id="confirmNote" class="modal-input" rows="2" placeholder="Them ghi chu"></textarea>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 mb-1">So luong bi anh huong</label>
+          <input id="confirmAffectedCount" class="modal-input" type="text" readonly />
+        </div>
+        <p id="confirmWarning" class="text-xs text-red-600 hidden">Canh bao: so luong X-OUT lon, vui long kiem tra lai truoc khi ap dung.</p>
+      </div>
+      <div class="mt-5 flex justify-end gap-2">
+        <button id="cancelConfirmBtn" type="button" class="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700">Huy</button>
+        <button id="applyConfirmBtn" type="button" class="px-4 py-2 rounded-lg bg-primary text-white font-semibold">Xac nhan ap dung</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="autoPreviewModal" class="modal-backdrop hidden">
+    <div class="modal-panel">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-bold">Preview Auto X-OUT</h3>
+        <button id="closeAutoPreviewBtn" class="text-slate-400 hover:text-slate-600" type="button">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      <div id="autoPreviewContent" class="text-sm text-slate-600 dark:text-slate-300 max-h-60 overflow-auto"></div>
+      <div class="mt-5 flex justify-end gap-2">
+        <button id="cancelAutoPreviewBtn" type="button" class="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700">Dong</button>
+        <button id="confirmAutoPreviewBtn" type="button" class="px-4 py-2 rounded-lg bg-primary text-white font-semibold">Xac nhan Auto X-OUT</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="historyDrawer" class="history-drawer">
+    <div class="history-content bg-white dark:bg-slate-800 border-l border-slate-200 dark:border-slate-700">
+      <div class="p-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+        <h3 class="text-lg font-bold">Audit Log</h3>
+        <button id="closeHistoryBtn" class="text-slate-400 hover:text-slate-600" type="button">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      <div class="p-4 space-y-3 border-b border-slate-200 dark:border-slate-700">
+        <div class="grid grid-cols-2 gap-2">
+          <input id="historyUserFilter" class="modal-input" placeholder="Filter user" type="text" />
+          <input id="historyActionFilter" class="modal-input" placeholder="Filter action" type="text" />
+          <input id="historyStageFilter" class="modal-input" placeholder="Filter stage" type="text" />
+          <input id="historyLotFilter" class="modal-input" placeholder="Filter lot" type="text" />
+          <input id="historyFromFilter" class="modal-input" type="datetime-local" />
+          <input id="historyToFilter" class="modal-input" type="datetime-local" />
+        </div>
+      </div>
+      <div id="historyList" class="p-4 space-y-2 max-h-[calc(100vh-210px)] overflow-auto"></div>
+    </div>
+  </div>
+
+  <script src="./data.js"></script>
+  <script src="./app.js"></script>
+</body>
+
+</html>
