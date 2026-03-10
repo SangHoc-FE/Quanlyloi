@@ -5,24 +5,24 @@ const MOCK_DB = {
       "BRD-88210-01": {
         totalPcs: 400, machine: "AOI-05",
         defects: [
-          { code: "E01", name: "Ngáº¯n máº¡ch", color: "red", positions: [12, 45, 78, 156] },
-          { code: "W04", name: "Thiáº¿u linh kiá»‡n", color: "orange", positions: [23, 67, 89, 134, 201, 345] },
-          { code: "M12", name: "DÃ­nh hÃ n", color: "yellow", positions: [99, 250, 310] },
+          { code: "E01", name: "Ngắn mạch", color: "red", positions: [12, 45, 78, 156] },
+          { code: "W04", name: "Thiếu linh kiện", color: "orange", positions: [23, 67, 89, 134, 201, 345] },
+          { code: "M12", name: "Đính hàn", color: "yellow", positions: [99, 250, 310] },
         ]
       },
       "BRD-88210-02": {
         totalPcs: 400, machine: "AOI-05",
         defects: [
-          { code: "E01", name: "Ngáº¯n máº¡ch", color: "red", positions: [5, 200] },
-          { code: "E03", name: "Há»Ÿ máº¡ch", color: "red", positions: [150, 300, 355] },
-          { code: "W04", name: "Thiáº¿u linh kiá»‡n", color: "orange", positions: [30, 60] },
+          { code: "E01", name: "Ngắn mạch", color: "red", positions: [5, 200] },
+          { code: "E03", name: "hở mạch", color: "red", positions: [150, 300, 355] },
+          { code: "W04", name: "Thiếu linh kiện", color: "orange", positions: [30, 60] },
         ]
       },
       "BRD-88210-03": {
         totalPcs: 400, machine: "AOI-05",
         defects: [
-          { code: "M12", name: "DÃ­nh hÃ n", color: "yellow", positions: [18, 72, 144, 288] },
-          { code: "M15", name: "Lá»‡ch linh kiá»‡n", color: "yellow", positions: [55, 110, 220] },
+          { code: "M12", name: "Đính hàn", color: "yellow", positions: [18, 72, 144, 288] },
+          { code: "M15", name: "Lệch linh kiện", color: "yellow", positions: [55, 110, 220] },
         ]
       }
     },
@@ -30,21 +30,21 @@ const MOCK_DB = {
       "BRD-88210-01": {
         totalPcs: 400, machine: "AOI-05",
         defects: [
-          { code: "E01", name: "Ngáº¯n máº¡ch", color: "red", positions: [33, 177] },
-          { code: "W04", name: "Thiáº¿u linh kiá»‡n", color: "orange", positions: [88, 144, 256] },
+          { code: "E01", name: "Ngắn mạch", color: "red", positions: [33, 177] },
+          { code: "W04", name: "Thiếu linh kiện", color: "orange", positions: [88, 144, 256] },
         ]
       },
       "BRD-88210-02": {
         totalPcs: 400, machine: "AOI-05",
         defects: [
-          { code: "W04", name: "Thiáº¿u linh kiá»‡n", color: "orange", positions: [10, 50, 100, 150, 200] },
-          { code: "M12", name: "DÃ­nh hÃ n", color: "yellow", positions: [75, 300] },
+          { code: "W04", name: "Thiếu linh kiện", color: "orange", positions: [10, 50, 100, 150, 200] },
+          { code: "M12", name: "Đính hàn", color: "yellow", positions: [75, 300] },
         ]
       },
       "BRD-88210-03": {
         totalPcs: 400, machine: "AOI-05",
         defects: [
-          { code: "E01", name: "Ngáº¯n máº¡ch", color: "red", positions: [22] },
+          { code: "E01", name: "Ngắn mạch", color: "red", positions: [22] },
         ]
       }
     },
@@ -52,7 +52,7 @@ const MOCK_DB = {
       "BRD-88210-01": {
         totalPcs: 400, machine: "AOI-05",
         defects: [
-          { code: "E01", name: "Ngáº¯n máº¡ch", color: "red", positions: [100, 200, 300] },
+          { code: "E01", name: "Ngắn mạch", color: "red", positions: [100, 200, 300] },
         ]
       },
       "BRD-88210-02": {
@@ -62,7 +62,7 @@ const MOCK_DB = {
       "BRD-88210-03": {
         totalPcs: 400, machine: "AOI-05",
         defects: [
-          { code: "M12", name: "DÃ­nh hÃ n", color: "yellow", positions: [15, 30, 45, 60, 75] },
+          { code: "M12", name: "Đính hàn", color: "yellow", positions: [15, 30, 45, 60, 75] },
         ]
       }
     }
@@ -72,34 +72,34 @@ const MOCK_DB = {
       "BRD-88210-01": {
         totalPcs: 400, machine: "AVI-02",
         defects: [
-          { code: "V01", name: "Tráº§y xÆ°á»›c", color: "orange", positions: [14, 28, 56, 112, 224] },
-          { code: "V02", name: "Báº©n bá» máº·t", color: "yellow", positions: [33, 66, 99] },
+          { code: "V01", name: "Trầy xước", color: "orange", positions: [14, 28, 56, 112, 224] },
+          { code: "V02", name: "Bẩn bề mặt", color: "yellow", positions: [33, 66, 99] },
         ]
       },
       "BRD-88210-02": {
         totalPcs: 400, machine: "AVI-02",
         defects: [
-          { code: "V01", name: "Tráº§y xÆ°á»›c", color: "orange", positions: [7, 140, 280] },
-          { code: "V03", name: "á» vÃ ng", color: "red", positions: [199, 350] },
+          { code: "V01", name: "Trầy xước", color: "orange", positions: [7, 140, 280] },
+          { code: "V03", name: "Ổ vàng", color: "red", positions: [199, 350] },
         ]
       },
       "BRD-88210-03": {
         totalPcs: 400, machine: "AVI-02",
         defects: [
-          { code: "V02", name: "Báº©n bá» máº·t", color: "yellow", positions: [50, 100, 150, 200, 250, 300, 350] },
+          { code: "V02", name: "Bẩn bề mặt", color: "yellow", positions: [50, 100, 150, 200, 250, 300, 350] },
         ]
       }
     },
     "Layer 2 (BOTTOM)": {
       "BRD-88210-01": {
         totalPcs: 400, machine: "AVI-02", defects: [
-          { code: "V01", name: "Tráº§y xÆ°á»›c", color: "orange", positions: [20, 40] },
+          { code: "V01", name: "Trầy xước", color: "orange", positions: [20, 40] },
         ]
       },
       "BRD-88210-02": { totalPcs: 400, machine: "AVI-02", defects: [] },
       "BRD-88210-03": {
         totalPcs: 400, machine: "AVI-02", defects: [
-          { code: "V03", name: "á» vÃ ng", color: "red", positions: [180] },
+          { code: "V03", name: "Ổ vàng", color: "red", positions: [180] },
         ]
       }
     },
@@ -107,7 +107,7 @@ const MOCK_DB = {
       "BRD-88210-01": { totalPcs: 400, machine: "AVI-02", defects: [] },
       "BRD-88210-02": {
         totalPcs: 400, machine: "AVI-02", defects: [
-          { code: "V02", name: "Báº©n bá» máº·t", color: "yellow", positions: [25, 50, 75] },
+          { code: "V02", name: "Bẩn bề mặt", color: "yellow", positions: [25, 50, 75] },
         ]
       },
       "BRD-88210-03": { totalPcs: 400, machine: "AVI-02", defects: [] }
@@ -118,32 +118,32 @@ const MOCK_DB = {
       "BRD-88210-01": {
         totalPcs: 400, machine: "ET-10",
         defects: [
-          { code: "T01", name: "Há»Ÿ máº¡ch Ä‘iá»‡n", color: "red", positions: [8, 16, 32, 64, 128, 256] },
-          { code: "T02", name: "Trá»Ÿ khÃ¡ng sai", color: "orange", positions: [44, 88, 176] },
+          { code: "T01", name: "Hở mạch điện", color: "red", positions: [8, 16, 32, 64, 128, 256] },
+          { code: "T02", name: "Trở kháng sai", color: "orange", positions: [44, 88, 176] },
         ]
       },
       "BRD-88210-02": {
         totalPcs: 400, machine: "ET-10", defects: [
-          { code: "T01", name: "Há»Ÿ máº¡ch Ä‘iá»‡n", color: "red", positions: [3, 6, 12] },
+          { code: "T01", name: "Hở mạch điện", color: "red", positions: [3, 6, 12] },
         ]
       },
       "BRD-88210-03": {
         totalPcs: 400, machine: "ET-10", defects: [
-          { code: "T02", name: "Trá»Ÿ khÃ¡ng sai", color: "orange", positions: [100, 200, 300, 399] },
-          { code: "T03", name: "RÃ² Ä‘iá»‡n", color: "yellow", positions: [55, 155] },
+          { code: "T02", name: "Trở kháng sai", color: "orange", positions: [100, 200, 300, 399] },
+          { code: "T03", name: "Rò điện", color: "yellow", positions: [55, 155] },
         ]
       }
     },
     "Layer 2 (BOTTOM)": {
       "BRD-88210-01": {
         totalPcs: 400, machine: "ET-10", defects: [
-          { code: "T01", name: "Há»Ÿ máº¡ch Ä‘iá»‡n", color: "red", positions: [50, 150, 250, 350] },
+          { code: "T01", name: "Hở mạch điện", color: "red", positions: [50, 150, 250, 350] },
         ]
       },
       "BRD-88210-02": { totalPcs: 400, machine: "ET-10", defects: [] },
       "BRD-88210-03": {
         totalPcs: 400, machine: "ET-10", defects: [
-          { code: "T03", name: "RÃ² Ä‘iá»‡n", color: "yellow", positions: [10, 20, 30] },
+          { code: "T03", name: "Rò điện", color: "yellow", positions: [10, 20, 30] },
         ]
       }
     },
@@ -151,7 +151,7 @@ const MOCK_DB = {
       "BRD-88210-01": { totalPcs: 400, machine: "ET-10", defects: [] },
       "BRD-88210-02": {
         totalPcs: 400, machine: "ET-10", defects: [
-          { code: "T01", name: "Há»Ÿ máº¡ch Ä‘iá»‡n", color: "red", positions: [77, 154] },
+          { code: "T01", name: "Hở mạch điện", color: "red", positions: [77, 154] },
         ]
       },
       "BRD-88210-03": { totalPcs: 400, machine: "ET-10", defects: [] }
@@ -161,19 +161,19 @@ const MOCK_DB = {
     "Layer 1 (TOP)": {
       "BRD-88210-01": {
         totalPcs: 400, machine: "VS-01", defects: [
-          { code: "S01", name: "Ná»©t board", color: "red", positions: [19, 38, 57] },
-          { code: "S02", name: "Cong vÃªnh", color: "orange", positions: [111, 222, 333] },
+          { code: "S01", name: "Nứt board", color: "red", positions: [19, 38, 57] },
+          { code: "S02", name: "Cong vênh", color: "orange", positions: [111, 222, 333] },
         ]
       },
       "BRD-88210-02": {
         totalPcs: 400, machine: "VS-01", defects: [
-          { code: "S03", name: "Máº¥t má»±c in", color: "yellow", positions: [40, 80, 120, 160] },
+          { code: "S03", name: "Mất mực in", color: "yellow", positions: [40, 80, 120, 160] },
         ]
       },
       "BRD-88210-03": {
         totalPcs: 400, machine: "VS-01", defects: [
-          { code: "S01", name: "Ná»©t board", color: "red", positions: [199] },
-          { code: "S02", name: "Cong vÃªnh", color: "orange", positions: [5, 10, 15, 20] },
+          { code: "S01", name: "Nứt board", color: "red", positions: [199] },
+          { code: "S02", name: "Cong vênh", color: "orange", positions: [5, 10, 15, 20] },
         ]
       }
     },
@@ -181,19 +181,19 @@ const MOCK_DB = {
       "BRD-88210-01": { totalPcs: 400, machine: "VS-01", defects: [] },
       "BRD-88210-02": {
         totalPcs: 400, machine: "VS-01", defects: [
-          { code: "S01", name: "Ná»©t board", color: "red", positions: [299, 300] },
+          { code: "S01", name: "Nứt board", color: "red", positions: [299, 300] },
         ]
       },
       "BRD-88210-03": {
         totalPcs: 400, machine: "VS-01", defects: [
-          { code: "S03", name: "Máº¥t má»±c in", color: "yellow", positions: [50, 100] },
+          { code: "S03", name: "Mất mực in", color: "yellow", positions: [50, 100] },
         ]
       }
     },
     "Internal 1": {
       "BRD-88210-01": {
         totalPcs: 400, machine: "VS-01", defects: [
-          { code: "S02", name: "Cong vÃªnh", color: "orange", positions: [66, 132, 198, 264, 330] },
+          { code: "S02", name: "Cong vênh", color: "orange", positions: [66, 132, 198, 264, 330] },
         ]
       },
       "BRD-88210-02": { totalPcs: 400, machine: "VS-01", defects: [] },
@@ -204,14 +204,14 @@ const MOCK_DB = {
     "Layer 1 (TOP)": {
       "BRD-88210-01": {
         totalPcs: 400, machine: "VS-02", defects: [
-          { code: "F01", name: "Thiáº¿u solder mask", color: "red", positions: [11, 22, 33, 44] },
-          { code: "F02", name: "Bá»t khÃ­", color: "yellow", positions: [55, 110, 165, 220, 275, 330, 385] },
+          { code: "F01", name: "Thiếu solder mask", color: "red", positions: [11, 22, 33, 44] },
+          { code: "F02", name: "Bị khí", color: "yellow", positions: [55, 110, 165, 220, 275, 330, 385] },
         ]
       },
       "BRD-88210-02": {
         totalPcs: 400, machine: "VS-02", defects: [
-          { code: "F01", name: "Thiáº¿u solder mask", color: "red", positions: [90] },
-          { code: "F03", name: "Sai mÃ u", color: "orange", positions: [170, 340] },
+          { code: "F01", name: "Thiếu solder mask", color: "red", positions: [90] },
+          { code: "F03", name: "Sai màu", color: "orange", positions: [170, 340] },
         ]
       },
       "BRD-88210-03": { totalPcs: 400, machine: "VS-02", defects: [] }
@@ -219,18 +219,18 @@ const MOCK_DB = {
     "Layer 2 (BOTTOM)": {
       "BRD-88210-01": {
         totalPcs: 400, machine: "VS-02", defects: [
-          { code: "F02", name: "Bá»t khÃ­", color: "yellow", positions: [13, 26, 39] },
+          { code: "F02", name: "Bọt khí", color: "yellow", positions: [13, 26, 39] },
         ]
       },
       "BRD-88210-02": {
         totalPcs: 400, machine: "VS-02", defects: [
-          { code: "F01", name: "Thiáº¿u solder mask", color: "red", positions: [100, 200] },
-          { code: "F03", name: "Sai mÃ u", color: "orange", positions: [50, 150, 250, 350] },
+          { code: "F01", name: "Thiếu solder mask", color: "red", positions: [100, 200] },
+          { code: "F03", name: "Sai màu", color: "orange", positions: [50, 150, 250, 350] },
         ]
       },
       "BRD-88210-03": {
         totalPcs: 400, machine: "VS-02", defects: [
-          { code: "F02", name: "Bá»t khÃ­", color: "yellow", positions: [77] },
+          { code: "F02", name: "Bọt khí", color: "yellow", positions: [77] },
         ]
       }
     },
@@ -239,7 +239,7 @@ const MOCK_DB = {
       "BRD-88210-02": { totalPcs: 400, machine: "VS-02", defects: [] },
       "BRD-88210-03": {
         totalPcs: 400, machine: "VS-02", defects: [
-          { code: "F01", name: "Thiáº¿u solder mask", color: "red", positions: [1, 399] },
+          { code: "F01", name: "Thiếu solder mask", color: "red", positions: [1, 399] },
         ]
       }
     }
@@ -254,19 +254,19 @@ const COLOR_MAP = {
     cell: "bg-red-500 border border-red-600 shadow-sm",
     bg: "bg-red-50 dark:bg-red-900/10", border: "border-red-100 dark:border-red-900/30",
     badge: "bg-red-500", text: "text-red-600 dark:text-red-400", darkLabel: "dark:text-red-200",
-    legendCell: "bg-red-500", legendLabel: "Lá»—i nghiÃªm trá»ng"
+    legendCell: "bg-red-500", legendLabel: "Lỗi nghiêm trọng"
   },
   orange: {
     cell: "bg-orange-500 border border-orange-600 shadow-sm",
     bg: "bg-orange-50 dark:bg-orange-900/10", border: "border-orange-100 dark:border-orange-900/30",
     badge: "bg-orange-500", text: "text-orange-600 dark:text-orange-400", darkLabel: "dark:text-orange-200",
-    legendCell: "bg-orange-500", legendLabel: "Cáº£nh bÃ¡o"
+    legendCell: "bg-orange-500", legendLabel: "Cảnh báo"
   },
   yellow: {
     cell: "bg-yellow-400 border border-yellow-500 shadow-sm",
     bg: "bg-yellow-50 dark:bg-yellow-900/10", border: "border-yellow-100 dark:border-yellow-900/30",
     badge: "bg-yellow-400", text: "text-yellow-600 dark:text-yellow-400", darkLabel: "dark:text-yellow-200",
-    legendCell: "bg-yellow-400", legendLabel: "Lá»—i nháº¹"
+    legendCell: "bg-yellow-400", legendLabel: "Lỗi nhẹ"
   },
 };
 
@@ -859,11 +859,11 @@ function updateAutoPanel() {
   const currentBoard = getCurrentContext().board;
   const boardPlan = plan.byBoard[currentBoard] || { sheets: [], overSheets: [] };
   if (!plan.sourceStage) {
-    document.getElementById("autoPreviewSummary").textContent = "Khong tim thay source stage co defect.";
+    document.getElementById("autoPreviewSummary").textContent = "không tìm thấy source stage co defect.";
     return;
   }
   if (boardPlan.sheets.length === 0) {
-    document.getElementById("autoPreviewSummary").textContent = `Source ${plan.sourceStage}: board hien tai khong vuot threshold ${plan.threshold}.`;
+    document.getElementById("autoPreviewSummary").textContent = `Source ${plan.sourceStage}: board hiện tại không vượt threshold ${plan.threshold}.`;
     return;
   }
   const sheetList = boardPlan.sheets.map((s) => `Sheet ${s.sheet + 1} (${s.count})`).join(", ");
@@ -927,7 +927,7 @@ function applyAutoXout() {
   closeAutoPreview();
   renderAll();
   updateAutoPanel();
-  showToast(`Da ap dung Auto X-OUT (${totalApplied} PCS).`);
+  showToast(`Đã áp dụng Auto X-OUT (${totalApplied} PCS).`);
 }
 
 function openDeleteConfirm(mode) {
@@ -937,13 +937,13 @@ function openDeleteConfirm(mode) {
   if (mode === "LOT") {
     const lot = document.getElementById("lotIdInput").value.trim();
     if (!lot) {
-      showToast("Can nhap Lot ID truoc khi xoa LOT.");
+      showToast("Cần nhập LOT ID trước khi xóa LOT.");
       return;
     }
 
     const targets = database.filter((item) => item.lotId === lot);
     if (!targets.length) {
-      showToast("Khong tim thay lot de xoa.");
+      showToast("không tìm thấy lot để xóa.");
       return;
     }
 
@@ -965,7 +965,7 @@ function openDeleteConfirm(mode) {
         addAuditLog("DELETE_LOT", lot, reason, note);
         clearSelection();
         renderAll();
-        showToast(`Da xoa du lieu lot ${lot}.`);
+        showToast(`đã xóa dữ liệu lot ${lot}.`);
       },
     });
     return;
@@ -973,7 +973,7 @@ function openDeleteConfirm(mode) {
 
   const targets = getTargetIndicesByLevel(currentScope === "LOT" ? "BOARD" : currentScope);
   if (!targets.length) {
-    showToast("Khong co du lieu duoc chon de xoa.");
+    showToast("không có dữ liệu được chọn để xóa.");
     return;
   }
 
@@ -987,7 +987,7 @@ function openDeleteConfirm(mode) {
       addAuditLog("DELETE_SCOPE", `${currentScope}:${targets.length} PCS`, reason, note);
       clearSelection();
       renderAll();
-      showToast("Da xoa du lieu theo scope.");
+      showToast("đã xóa dữ liệu theo scope.");
     },
   });
 }
@@ -1039,12 +1039,12 @@ function executePendingConfirm() {
   const note = document.getElementById("confirmNote").value.trim();
 
   if (pendingAction.requireReason && !reason) {
-    showToast("Vui long nhap ma loi hoac ly do.");
+    showToast("vui lòng nhập mã lỗi hoặc lý do xác nhận.");
     return;
   }
 
   if (pendingAction.strongToken && reason !== pendingAction.strongToken) {
-    showToast(`Vui long nhap dung '${pendingAction.strongToken}' de xac nhan.`);
+    showToast(`Vui lòng nhập đúng '${pendingAction.strongToken}' để xác nhận.`);
     return;
   }
 
@@ -1073,14 +1073,14 @@ function renderLegend(data) {
   container.innerHTML = `
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
       <div class="legend-group space-y-2">
-        <div class="text-xs font-bold uppercase tracking-wide text-slate-500">Defect Severity</div>
-        <div class="legend-row"><span class="legend-dot bg-emerald-500/20 border-emerald-500/30"></span>Normal / OK (${okCount})</div>
-        <div class="legend-row"><span class="legend-dot bg-red-500"></span>Critical (${counts.red})</div>
-        <div class="legend-row"><span class="legend-dot bg-orange-500"></span>Warning (${counts.orange})</div>
-        <div class="legend-row"><span class="legend-dot bg-yellow-400"></span>Minor (${counts.yellow})</div>
+        <div class="text-xs font-bold uppercase tracking-wide text-slate-500">Mức độ nghiêm trọng của lỗi</div>
+        <div class="legend-row"><span class="legend-dot bg-emerald-500/20 border-emerald-500/30"></span>Bình thường / OK (${okCount})</div>
+        <div class="legend-row"><span class="legend-dot bg-red-500"></span>Nghiêm trọng (${counts.red})</div>
+        <div class="legend-row"><span class="legend-dot bg-orange-500"></span>Cảnh báo (${counts.orange})</div>
+        <div class="legend-row"><span class="legend-dot bg-yellow-400"></span> Nhẹ (${counts.yellow})</div>
       </div>
       <div class="legend-group space-y-2">
-        <div class="text-xs font-bold uppercase tracking-wide text-slate-500">X-OUT Process State</div>
+        <div class="text-xs font-bold uppercase tracking-wide text-slate-500">X-OUT Trạng thái quy trình</div>
         <div class="legend-row"><span class="legend-dot" style="background: repeating-linear-gradient(45deg, rgba(148,163,184,.8) 0px, rgba(148,163,184,.8) 4px, transparent 4px, transparent 8px);"></span>Manual X-OUT (${manualSet.size})</div>
         <div class="legend-row"><span class="legend-dot" style="border:2px solid #0ea5e9;"></span>Auto X-OUT (${autoSet.size})</div>
         <div class="legend-row"><span class="legend-dot" style="border:2px solid #ef4444;"></span>Qua X-OUT (${overSet.size})</div>
@@ -1130,9 +1130,9 @@ function renderDefectCodes(data) {
 function updateFooter(data) {
   const now = new Date();
   const time = now.toTimeString().split(" ")[0];
-  document.getElementById("footerTime").textContent = `Last updated: ${time}`;
-  document.getElementById("footerMachine").textContent = `Machine: ${data.machine}`;
-  document.getElementById("footerTotal").textContent = `Total Pcs: ${getActiveTotalPcs(data)}`;
+  document.getElementById("footerTime").textContent = `Cập nhật lần cuối: ${time}`;
+  document.getElementById("footerMachine").textContent = `Loại máy: ${data.machine}`;
+  document.getElementById("footerTotal").textContent = `Tổng số: ${getActiveTotalPcs(data)}`;
 }
 
 function showCellTooltip(anchor, html) {
@@ -1216,7 +1216,7 @@ function renderHistory() {
 
   const container = document.getElementById("historyList");
   if (!list.length) {
-    container.innerHTML = `<div class="text-sm text-slate-500">Chua co lich su thao tac.</div>`;
+    container.innerHTML = `<div class="text-sm text-slate-500">Chưa có lịch sử thao tác.</div>`;
     return;
   }
 
@@ -1237,7 +1237,7 @@ function runSearch() {
 
   const record = database.find((item) => item.productId === productId && item.lotId === lotId);
   if (!record) {
-    showToast("Khong tim thay Product ID / Lot ID.");
+    showToast("Không tìm thấy Product ID / Lot ID.");
     return;
   }
 
@@ -1282,5 +1282,6 @@ function exportCSV(data) {
   a.download = `defect_report_${currentStage}_${Date.now()}.csv`;
   a.click();
   URL.revokeObjectURL(url);
-  showToast("Da xuat file CSV thanh cong!");
+  showToast("Đã xuất file CSV thành công!");
+
 }
